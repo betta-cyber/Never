@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PlayerControl1 : MonoBehaviour
 {
-    static int count;
+    static int status;
     private bool enter = false;
     private bool enter1 = false;
     private Vector3 pos1;
@@ -15,7 +15,7 @@ public class PlayerControl1 : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        count = 0;
+        status = 0;
         trigger = false;
     }
 
@@ -23,36 +23,49 @@ public class PlayerControl1 : MonoBehaviour
     void Update()
     {
         scankey();
-        if (Input.GetKeyDown(KeyCode.J) && count < 2)
+        if (Input.GetKeyDown(KeyCode.J) && status < 3)
         {
-            if (count == 0)
+            if (status == 0)
             {
                 TimeMiki.gameObject.SetActive(true);
-                //GameObject t0 = Instantiate(TimeMiki, transform.position, transform.rotation) as GameObject;
                 TimeMiki.position = transform.position;
                 pos1 = transform.position;
+                status = 2;
+                return;
             }
-            if (count == 1)
+            if (status == 1)
             {
+                TimeMiki.gameObject.SetActive(true);
+                TimeMiki.position = transform.position;
+                pos1 = transform.position;
+                status = 3;
+            }
+            if (status == 2)
+            {
+                Debug.Log("111");
                 TimeMiki1.gameObject.SetActive(true);
-                //GameObject t0 = Instantiate(TimeMiki, transform.position, transform.rotation) as GameObject;
                 TimeMiki1.position = transform.position;
                 pos2 = transform.position;
+                status = 3;
             }
-            count++;
-            Debug.Log(count);
+            if (status == 3)
+            {
+                return;
+            }
+            Debug.Log(status);
         }
 
         if (Input.GetKeyDown(KeyCode.J) && enter)
         {
             TimeMiki.gameObject.SetActive(false);
-            count--;
-            Debug.Log("xx");
+            enter = false;
+            status = 1;
         }
         if (Input.GetKeyDown(KeyCode.J) && enter1)
         {
             TimeMiki1.gameObject.SetActive(false);
-            Debug.Log("vv");
+            enter1 = false;
+            status = 2;
         }
 
         if (Input.GetKeyDown(KeyCode.K) && enter)
@@ -97,12 +110,10 @@ public class PlayerControl1 : MonoBehaviour
     {
         if (col.tag == "TimeMiki")
         {
-            Debug.Log("11");
             enter = true;
         }
         if (col.tag == "TimeMiki1")
         {
-            Debug.Log("22");
             enter1 = true;
         }
     }
