@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\PlayerControl.cs" />
      <Compile Include="Assets\PlayerControl1.cs" />
+     <Compile Include="Assets\SceneChange.cs" />
      <Compile Include="Assets\TimeMiki.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.1/UnityEngine.UI.dll</HintPath>
