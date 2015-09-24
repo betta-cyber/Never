@@ -9,6 +9,16 @@ public class PlayerControl1 : MonoBehaviour
     private Vector3 pos1;
     private Vector3 pos2;
     public static bool trigger;
+    private RaycastHit2D rayCastHit;
+    public Transform fashe;
+    public Transform groundCheck;
+    private bool grounded;
+    private int state;
+    public float jumpForce;
+    private bool jump;
+
+    public LayerMask PlatformMask = 0;
+    public LayerMask OneWayPlatformMask = 0;
 
     public Transform TimeMiki;
     public Transform TimeMiki1;
@@ -17,12 +27,64 @@ public class PlayerControl1 : MonoBehaviour
     {
         status = 0;
         trigger = false;
+        PlatformMask |= OneWayPlatformMask;
     }
 
     // Update is called once per frame
     void Update()
     {
         scankey();
+        rime();
+        if(Input.GetKeyDown(KeyCode.Space) && grounded)
+        {
+            jump = true;
+            Debug.Log("sssss");
+        }
+        if (jump)
+        {
+            rigidbody2D.AddForce(new Vector2(0f, jumpForce));
+            jump = false;
+        }
+        Debug.DrawLine(fashe.position, groundCheck.position);
+        grounded = Physics2D.Linecast(fashe.position, groundCheck.position, PlatformMask);
+        if (grounded)
+        {
+            //rigidbody2D.gravityScale = 0;
+            GravityActive(false);
+            if (rigidbody2D.velocity.y > 0)
+            {
+                return;
+            }
+            else
+            {
+                rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
+            }
+        }
+        if (!grounded)
+        {
+            GravityActive(true);
+        }
+    }
+
+    void scankey()
+    {
+        if (Input.GetKey(KeyCode.A) | Input.GetKey(KeyCode.LeftArrow))
+        {
+            transform.Translate(-5 * Time.deltaTime, 0, 0, Space.World);
+            Vector3 theScale = transform.localScale;
+            theScale.x = -1;
+            transform.localScale = theScale;
+        }
+        if (Input.GetKey(KeyCode.D) | Input.GetKey(KeyCode.RightArrow))
+        {
+            transform.Translate(5 * Time.deltaTime, 0, 0, Space.World);
+            Vector3 theScale = transform.localScale;
+            theScale.x = 1;
+            transform.localScale = theScale;
+        }
+    }
+    void rime()
+    {
         if (Input.GetKeyDown(KeyCode.J) && status < 3)
         {
             if (status == 0)
@@ -79,33 +141,6 @@ public class PlayerControl1 : MonoBehaviour
             enter1 = false;
         }
     }
-
-    void scankey()
-    {
-        if (Input.GetKey(KeyCode.A) | Input.GetKey(KeyCode.LeftArrow))
-        {
-            transform.Translate(-5 * Time.deltaTime, 0, 0, Space.World);
-            Vector3 theScale = transform.localScale;
-            theScale.x = -1;
-            transform.localScale = theScale;
-        }
-        if (Input.GetKey(KeyCode.D) | Input.GetKey(KeyCode.RightArrow))
-        {
-            transform.Translate(5 * Time.deltaTime, 0, 0, Space.World);
-            Vector3 theScale = transform.localScale;
-            theScale.x = 1;
-            transform.localScale = theScale;
-        }
-        if (Input.GetKey(KeyCode.W) | Input.GetKey(KeyCode.UpArrow))
-        {
-            transform.Translate(0, 5 * Time.deltaTime, 0, Space.World);
-        }
-        if (Input.GetKey(KeyCode.S) | Input.GetKey(KeyCode.DownArrow))
-        {
-            transform.Translate(0, -5 * Time.deltaTime, 0, Space.World);
-        }
-    }
-
     void OnTriggerStay2D(Collider2D col)
     {
         if (col.tag == "TimeMiki")
@@ -126,6 +161,17 @@ public class PlayerControl1 : MonoBehaviour
         if (col.tag == "TimeMiki1")
         {
             enter1 = false;
+        }
+    }
+    private void GravityActive(bool state)
+    {
+        if (state == true)
+        {
+            rigidbody2D.gravityScale = 1;
+        }
+        else
+        {
+            rigidbody2D.gravityScale = 0;
         }
     }
 }

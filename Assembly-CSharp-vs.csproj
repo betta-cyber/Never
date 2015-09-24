@@ -46,6 +46,8 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Ladder.cs" />
+     <Compile Include="Assets\LadderTop.cs" />
      <Compile Include="Assets\PlayerControl.cs" />
      <Compile Include="Assets\PlayerControl1.cs" />
      <Compile Include="Assets\SceneChange.cs" />
